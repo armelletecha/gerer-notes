@@ -1,0 +1,5 @@
+= gestion-de-notes
+
+Generate this with
+    gestion-de-notes rdoc
+After you have described your command line interface

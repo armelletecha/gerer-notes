@@ -1,0 +1,6 @@
+= gestion-de-notes
+
+Describe your project here
+
+:include:gestion-de-notes.rdoc
+
