@@ -44,7 +44,7 @@ command :enregistrer_note do |c|
 	#GestionNotes.lectureFichier("BD_simplifiee")
 	g = GestionDeNotes.enregistrer_note(code,iddevoir,note)
 	if list
-		#g = GestionDeNotes.enregistrer_note(code,iddevoir,note,list)
+		g = GestionDeNotes.enregistrer_note(code,iddevoir,note)
 		
     puts g
   end
