@@ -1,0 +1,15 @@
+module GestionDeNotes
+
+def lecture_fichier(fichier)
+		tableau_etudiants = Array.new
+		tableau_etudiants2 = Array.new
+		CSV.foreach(fichier) do |ligne|
+			etudiant = Etudiant.new(ligne[0],ligne[1],ligne[2])
+			tableau_etudiants2.push(etudiant) if fichier != 'liste_etudiants_defaut.csv'
+			tableau_etudiants.push(etudiant)
+		end
+		return tableau_etudiants2 if fichier != 'liste_etudiants_defaut.csv'
+		return tableau_etudiants
+
+	end
+end

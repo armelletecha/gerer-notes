@@ -1,0 +1,18 @@
+require 'csv'
+
+#def lecture_fichier(fichier)
+		
+		CSV.foreach('liste_etudiants_defaut.csv') do |ligne|
+			tableau = Array.new
+			etudiant = Array.new
+			etudiant.push(ligne[0])
+			etudiant.push(ligne[1])
+			etudiant.push(ligne[2])
+			tableau.push(etudiant)
+		end
+		puts tableau
+		
+	#end
+
+#lecture_fichier('liste_etudiants_defaut.csv')
+
