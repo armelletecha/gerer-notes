@@ -1,25 +1,8 @@
 module GestionDeNotes
-#require_relative
-#require 'travail'
-#require 'etudiant'
+require 'csv'
+
 
   VERSION = '0.0.1'
-
-class Travail
-	attr_reader :id_devoir
-	attr_reader :nom_devoir
-	attr_reader :ponderation
-	attr_reader :corrige_sur
-	
-
-	def initialize( id,nom,ponderation,corrige_sur )
-		@id_devoir = id
-		@nom_devoir = nom
-		@ponderation = ponderation
-		@corrige_sur = corrige_sur
-		
-	end
-end
 
 class Etudiant
 	attr_reader :code
@@ -38,54 +21,74 @@ class Etudiant
 		@cote = 0
 		
 	end
-
-	
-	def self.enregistrer_note(code,id_devoir,note,tableau_etudiants,tableau_travaux)
-
-#verifier que l id_devoir specifie existe
-		tableau_travaux.each do |travail|
-			existe_travail = true if travail.id === id_devoir
-			existe_travail = false
-		end
-
-#inserer la note dans le tableau
-		tableau_etudiants.each do |etudiant|
-			etudiant.note[:id_devoir] = note if etudiant.code === code
-			return " note enregistree "
-		end
-	end
-
 end
 
+class Travail
+	attr_reader :id_devoir
+	attr_reader :nom_devoir
+	attr_reader :ponderation
+	attr_reader :corrige_sur
+	
 
+	def initialize( id,nom,ponderation,corrige_sur )
+		@id_devoir = id
+		@nom_devoir = nom
+		@ponderation = ponderation
+		@corrige_sur = corrige_sur
+		
+	end
+end
 
 #methode pour lire le fichier de description des etudiants
+
 	def self.lecture_fichier(fichier)
 		tableau_etudiants = Array.new
-		tableau_etudiants2 = Array.new
 		CSV.foreach(fichier) do |ligne|
-			etudiant = Etudiant.new(ligne[0],ligne[1],ligne[2])
-			tableau_etudiants2.push(etudiant) if fichier != 'liste_etudiants_defaut.csv'
+			etudiant = Etudiant.new(ligne[0],ligne[1],
+                                             ligne[2])
 			tableau_etudiants.push(etudiant)
 		end
-		return tableau_etudiants2 if fichier != 'liste_etudiants_defaut.csv'
 		return tableau_etudiants
 
 	end
 
 #methode pour lire le fichiers de description des travaux
-		def self.lecture_fichier_cours(fichier)
-			informations_cours = Array.new
-			informations_cours2 = Array.new
-			CSV.foreach(fichier) do |ligne|
-				travail = Travail.new ligne[0], ligne[1], ligne[2], ligne[3]
-				informations_cours2.push(travail) if fichier != 'informations_cours_defaut.csv'
-				informations_cours.push(travail)
-			end
-			return informations_cours2 if fichier != 'informations_cours_defaut.csv'
-			return informations_cours
-
+	def self.lecture_fichier_cours(fichier)
+		informations_cours = Array.new
+		CSV.foreach(fichier) do |ligne|
+			travail = Travail.new(ligne[0],ligne[1],
+                                            ligne[2])
+			informations_cours.push(travail)
+		end
+		return informations_cours
 	end
 
 
+
+
+#methode pour enregistrer la note d'un etudiant	
+	def self.enregistrer_note( *args )
+		tableau_etudiants = lecture_fichier('liste_etudiants_defaut_test.csv')
+		tableau_travaux = lecture_fichier_cours('informations_cours_defaut_test.csv')
+
+#verifier que l id_devoir specifie existe
+		tableau_travaux.each do |travail|
+			existe_travail = true if travail.id_devoir === args[1]
+			existe_travail = false
+		end
+
+#inserer la note dans le tableau
+		tableau_etudiants.each do |etudiant|
+			if etudiant.code === args[0] then
+				etudiant.note[:args[1]] = args[2] 
+				CSV.open('liste_etudiants_defaut_test.csv') do |csv_object|
+					csv_object << args[2]
+				end
+				return " note enregistree "
+			end
+		end
+			
+	end
+
 end
+

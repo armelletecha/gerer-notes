@@ -1,14 +1,15 @@
 #!/usr/bin/env ruby
 require 'gli'
 
-begin # XXX: Remove this begin/rescue before distributing your app
-require 'gestion-de-notes'
-rescue LoadError
-  STDERR.puts "In development, you need to use `bundle exec bin/gestion-de-notes` to run your app"
-  STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
-  STDERR.puts "Feel free to remove this message from bin/gestion-de-notes now"
-  exit 64
-end
+#begin # XXX: Remove this begin/rescue before distributing your app
+#require 'gestion-de-notes'
+#rescue LoadError
+  #STDERR.puts "In development, you need to use `bundle exec bin/gestion-de-notes` to run your app"
+  #STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
+  #STDERR.puts "Feel free to remove this message from bin/gestion-de-notes now"
+ # exit 64
+#end
+
 include GLI::App
 
 program_desc 'Gérer l enregistrerment des notes d etudiant'
@@ -18,49 +19,35 @@ version GestionDeNotes::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
-#desc 'Describe some switch here'
-#switch [:s,:switch]
-
 #option globale pour specifier le fichier a utiliser pour la liste des etudiants
 desc 'utiliser la liste des etudiants par defaut ou un fichier specifie par l utilisateur'
-default_value 'fichier liste_etudiants_defaut.csv'
-arg_name 'The name of the argument'
-flag [:l,:list]
+default_value 'liste_etudiants_defaut_test.csv'
+arg_name 'fichier_etudiants'
+flag [:e,:fichier_etudiants]
 
 #option globale pour specifier le fichier de description du groupe de cours
 desc 'utiliser le fichier de description du groupe cours par defaut ou un fichier specifie par l utilisateur'
-default_value 'fichier informations_cours_defaut.csv'
-arg_name 'The name of the argument'
-flag [:c,:cours]
+default_value 'informations_cours_defaut_test.csv'
+arg_name 'fichier_cours'
+flag [:c,:fichier_cours]
 
 
 
 #fonctionnalite 1 
-desc 'Enregistrer note d etudiant'
-arg_name 'code permanent de l etudiant, identifiant du devoir, note, liste des etudiants, fichier des travaux du groupe cours'
+desc 'Enregistrer note d\'un etudiant'
+arg_name ' code_permanent id_devoir note'
 
 command :enregistrer_note do |c|
 
   c.action do |global_options,options,args|
-	list = global_options[:list]
-	cours = global_options[:cours]
-	code = args.shift 
-	iddevoir = args.shift
-	 note = args.shift
-	fichier_etudiants = "/home/miteuh/gestion-de-notes/lib/gestion-de-notes/liste_etudiants_defaut.csv"
-	fichier_cours = "/home/miteuh/gestion-de-notes/lib/gestion-de-notes/informations_cours_defaut.csv"
-
-#lecture des fichiers
-	tableau_etudiants = GestionDeNotes::lecture_fichier(fichier_etudiants)
-	tableau_travaux = GestionDeNotes::lecture_fichier_cours(fichier_cours)
-
-#enregistrement de la note de l etudiant
-	g = GestionDeNotes::Etudiant.enregistrer_note(code,iddevoir,note,tableau_etudiants,tableau_travaux)
-
-#gestion des options globales
-	tableau_etudiants = GestionDeNotes::lecture_fichier(list) if list
-	tableau_travaux = GestionDeNotes::lecture_fichier_cours(cours) if cours
+	fichier_etudiants = global_options[:fichier_etudiants]
+	fichier_cours = global_options[:fichier_cours]
+	code_permanent = args.shift 
+	id_devoir = args.shift
+	note = args.shift
 	
+#enregistrement de la note de l etudiant
+	g = GestionDeNotes.enregistrer_note(code_permanent, id_devoir, note)
     puts g
   end
 end
