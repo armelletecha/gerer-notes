@@ -46,9 +46,8 @@ command :enregistrer_note do |c|
 	id_devoir = args.shift
 	note = args.shift
 	
-	puts method(:enregistrer_note).parameters
 #enregistrement de la note de l etudiant
-	g = GestionDeNotes.enregistrer_note(code_permanent, id_devoir, note)
+	g = FonctionsGestionDeNotes.enregistrer_note(code_permanent, id_devoir, note)
     puts g
   end
 end
@@ -106,9 +105,9 @@ post do |global,command,options,args|
 end
 
 on_error do |exception|
-  # Error logic here
-  # return false to skip default error handling
-  true
+ 	STDERR.puts "#{exception.class}({#exception.message})"
+	STDERR.puts exception.backtrace
+  false
 end
 
 exit run(ARGV)

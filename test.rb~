@@ -1,0 +1,8 @@
+a = "{""Projet 1""=>""30""}"
+tableau = a.split(" \" ")
+tableau = tableau[0].split("{")
+tableau = tableau[1].split("}")
+tableau = tableau[0].split("=>")
+
+hasha = { tableau[0] => tableau[1] }
+puts hasha

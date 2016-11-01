@@ -1,5 +1,5 @@
 module GestionDeNotes
-require 'csv'
+
 class Etudiant
 	attr_reader :code
 	attr_reader :nom
@@ -18,6 +18,9 @@ class Etudiant
 		
 	end
 end
+
+end
+
 
 
 

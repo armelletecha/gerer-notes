@@ -21,7 +21,7 @@ arguments :strict
 
 #option globale pour specifier le fichier a utiliser pour la liste des etudiants
 desc 'utiliser la liste des etudiants par defaut ou un fichier specifie par l utilisateur'
-default_value 'liste_etudiants_defaut_test.csv'
+default_value 'liste_etudiants_defaut.csv'
 arg_name 'fichier_etudiants'
 flag [:e,:fichier_etudiants]
 
@@ -105,9 +105,9 @@ post do |global,command,options,args|
 end
 
 on_error do |exception|
-  # Error logic here
-  # return false to skip default error handling
-  true
+ 	STDERR.puts "#{exception.class}({#exception.message})"
+	STDERR.puts exception.backtrace
+  false
 end
 
 exit run(ARGV)
