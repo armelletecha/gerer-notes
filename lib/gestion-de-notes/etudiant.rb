@@ -23,13 +23,13 @@ class Etudiant
 
 #verifier que l id_devoir specifie existe
 		tableau_travaux.each do |travail|
-			existe_travail = true if travail.id === id_devoir
+			existe_travail = true if travail.id == id_devoir
 			existe_travail = false
 		end
 
 #inserer la note dans le tableau
 		tableau_etudiants.each do |etudiant|
-			etudiant.note[:id_devoir] = note if etudiant.code === code
+			etudiant.note[:id_devoir] = note if etudiant.code == code
 			return " note enregistree "
 		end
 	end
