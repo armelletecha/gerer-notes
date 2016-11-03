@@ -1,3 +1,5 @@
-MAMA18529503,Mama,Kouboura
-TENA27589002,Tenekeu,Armelle
-,
+code_permanent,nom,prenom,"notes,moyenne",cote
+MAMA18529503,Mama,Kouboura,{},0,0
+TENA27589002,Tenekeu,Armelle,"{""Projet 1""=>""30""}",0,0
+BEYS20088608,Bey,Sofiane,{},0,0
+DIAP03539304,Papa,Lamine,{},0,0

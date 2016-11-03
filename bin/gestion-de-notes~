@@ -21,7 +21,7 @@ arguments :strict
 
 #option globale pour specifier le fichier a utiliser pour la liste des etudiants
 desc 'utiliser la liste des etudiants par defaut ou un fichier specifie par l utilisateur'
-default_value 'liste_etudiants_defaut_test.csv'
+default_value 'liste_etudiants_defaut.csv'
 arg_name 'fichier_etudiants'
 flag [:e,:fichier_etudiants]
 
@@ -47,7 +47,7 @@ command :enregistrer_note do |c|
 	note = args.shift
 	
 #enregistrement de la note de l etudiant
-	g = FonctionsGestionDeNotes.enregistrer_note(code_permanent, id_devoir, note)
+	g = GestionDeNotes.enregistrer_note(code_permanent, id_devoir, note)
     puts g
   end
 end
@@ -56,36 +56,44 @@ desc 'Calculer la moyenne de chaque étudiant de la classe '
 arg_name ' '
 command :moyenne_etudiants do |c|
   c.action do |global_options,options,args|
-    puts "moyenne_etudiants command ran"
+	fichier_etudiants = global_options[:fichier_etudiants]
+	fichier_cours = global_options[:fichier_cours]
+	m = GestionDeNotes.moyenne_etudiants
+    puts m
   end
 end
 
-desc 'Calcule la moyenne, l ecart type et la medianne de toute la classe'
+desc 'Calcule la moyenne de la classe'
 arg_name ' '
 command :informations_classe do |c|
   c.action do |global_options,options,args|
-    puts "cote"
+	fichier_etudiants = global_options[:fichier_etudiants]
+	fichier_cours = global_options[:fichier_cours]
+	mc = GestionDeNotes.moyenne_classe
+    puts mc
   end
 end
 
-desc 'Calculer le rang centile et attribuer les cotes'
+desc 'attribuer les cotes'
 arg_name ' '
 command :attribuer_cote do |c|
+   c.desc 'Calculer les cotes selon les lettres que l utilisateur aurait fourni'
+   c.default_value 'A B C D E F'
+  c.flag :f
   c.action do |global_options,options,args|
-    puts "attribuer_cote command ran"
+	fichier_etudiants = global_options[:fichier_etudiants]
+	fichier_cours = global_options[:fichier_cours]
+	c = GestionDeNotes.attribuer_cote
+    puts c
   end
 end
+
 
 desc 'afficher les informations de la classe et des etudiants'
 arg_name 'Describe arguments to afficher here'
 command :afficher do |c|
-  c.desc 'Calculer les cotes selon les lettres que l utilisateur aurait fourni'
-  c.default_value 'A B C D E F'
-  c.flag :f
-
-
   c.action do |global_options,options,args|
-    puts "afficher command ran"
+    GestionDeNotes.afficher
   end
 end
 

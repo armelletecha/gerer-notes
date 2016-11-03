@@ -1,8 +1,22 @@
-a = "{""Projet 1""=>""30""}"
-tableau = a.split(" \" ")
-tableau = tableau[0].split("{")
-tableau = tableau[1].split("}")
-tableau = tableau[0].split("=>")
+require 'csv'
+def lecture_fichier_cours(fichier)
+		informations_cours = Array.new
+		csv_contents = CSV.read(fichier)
+		csv_contents.shift
+		csv_contents.shift
+		csv_contents.shift
+		csv_contents.shift
 
-hasha = { tableau[0] => tableau[1] }
-puts hasha
+		csv_contents.each do |ligne|
+			travail = Array.new
+			travail.push(ligne[0])
+			travail.push(ligne[1])
+		        travail.push(ligne[2])
+			travail.push(ligne[3])
+			informations_cours.push(travail)
+			end
+		return informations_cours
+	end
+
+puts lecture_fichier_cours('informations_cours_defaut.csv')
+
