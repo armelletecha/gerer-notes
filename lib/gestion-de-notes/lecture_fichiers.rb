@@ -1,4 +1,5 @@
 module GestionDeNotes
+require 'csv'
 
 #Convertir un string en hash
   def self.convert_to_hash(var_string)

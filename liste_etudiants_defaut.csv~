@@ -1,4 +1,5 @@
-MAMA18529503,Mama,Kouboura,"{""Projet1""=>""25"", ""Projet2""=>""40"", ""Examen""=>""45""}",85.625,A
-TENA27589002,Tenekeu,Armelle,"{""Projet1""=>""30"", ""Projet2""=>""35"", ""Examen""=>""50""}",90.625,A
-BEYS20088608,Bey,Sofiane,"{""Projet1""=>""20"", ""Projet2""=>""38"", ""Examen""=>""45""}",81.25,A-
-DIAP03539304,Papa,Lamine,"{""Projet1""=>""40"", ""Projet2""=>""40"", ""Examen""=>""50""}",100.0,A
+code_permanent,nom,prenom,"notes,moyenne",cote
+MAMA18529503,Mama,Kouboura,{},0,0
+TENA27589002,Tenekeu,Armelle,"{""Projet 1""=>""30""}",0,0
+BEYS20088608,Bey,Sofiane,{},0,0
+DIAP03539304,Papa,Lamine,{},0,0

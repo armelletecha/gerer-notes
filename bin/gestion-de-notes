@@ -1,25 +1,19 @@
 #!/usr/bin/env ruby
 require 'gli'
-
-#begin # XXX: Remove this begin/rescue before distributing your app
-#require 'gestion-de-notes'
-#rescue LoadError
-  #STDERR.puts "In development, you need to use `bundle exec bin/gestion-de-notes` to run your app"
-  #STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
-  #STDERR.puts "Feel free to remove this message from bin/gestion-de-notes now"
- # exit 64
-#end
+require 'gestion-de-notes.rb'
 
 include GLI::App
 program_desc 'Gérer l enregistrerment des notes d etudiant'
 version GestionDeNotes::VERSION
 subcommand_option_handling :normal
 arguments :strict
+
 #option globale pour specifier le fichier a utiliser pour la liste des etudiants
 desc 'utiliser la liste des etudiants par defaut ou un fichier specifie par l utilisateur'
 default_value 'liste_etudiants_defaut.csv'
 arg_name 'fichier_etudiants'
 flag [:e,:fichier_etudiants]
+
 #option globale pour specifier le fichier de description du groupe de cours
 desc 'utiliser le fichier de description du groupe cours par defaut ou un fichier specifie par l utilisateur'
 default_value 'informations_cours_defaut_test.csv'
@@ -48,28 +42,14 @@ desc 'Calculer la moyenne de chaque étudiant de la classe '
 arg_name ' '
 command :moyenne_etudiants do |c|
   c.action do |global_options,options,args|
-<<<<<<< HEAD
-	fichier_etudiants = global_options[:fichier_etudiants]
-	fichier_cours = global_options[:fichier_cours]
-	m = GestionDeNotes.moyenne_etudiants
-=======
   fichier_etudiants = global_options[:fichier_etudiants]
   fichier_cours = global_options[:fichier_cours]
   m = GestionDeNotes.moyenne_etudiants
->>>>>>> 03c0327b31ba1139609912d2768d37a7a8a45cfc
     puts m
   end
 end
 
-<<<<<<< HEAD
-desc 'Calcule la moyenne de la classe'
-arg_name ' '
-command :informations_classe do |c|
-  c.action do |global_options,options,args|
-	fichier_etudiants = global_options[:fichier_etudiants]
-	fichier_cours = global_options[:fichier_cours]
-	mc = GestionDeNotes.moyenne_classe
-=======
+
 #3eme fonctionnalite
 desc 'Calculer la moyenne du groupe'
 arg_name ' '
@@ -78,54 +58,37 @@ command :informations_classe do |c|
   fichier_etudiants = global_options[:fichier_etudiants]
   fichier_cours = global_options[:fichier_cours]
   mc = GestionDeNotes.moyenne_classe
->>>>>>> 03c0327b31ba1139609912d2768d37a7a8a45cfc
     puts mc
   end
 end
 
-<<<<<<< HEAD
-desc 'attribuer les cotes'
-=======
+
 #4eme fonctionnalite
-desc 'Ettribuer les cotes'
->>>>>>> 03c0327b31ba1139609912d2768d37a7a8a45cfc
+desc 'Attribuer les cotes'
 arg_name ' '
 command :attribuer_cote do |c|
    c.desc 'Calculer les cotes selon les lettres que l utilisateur aurait fourni'
    c.default_value 'A A- B+ B E'
   c.flag :f
   c.action do |global_options,options,args|
-<<<<<<< HEAD
-	fichier_etudiants = global_options[:fichier_etudiants]
-	fichier_cours = global_options[:fichier_cours]
-	c = GestionDeNotes.attribuer_cote
-=======
   fichier_etudiants = global_options[:fichier_etudiants]
   fichier_cours = global_options[:fichier_cours]
   c = GestionDeNotes.attribuer_cote
->>>>>>> 03c0327b31ba1139609912d2768d37a7a8a45cfc
     puts c
   end
 end
 
-<<<<<<< HEAD
 
-desc 'afficher les informations de la classe et des etudiants'
-arg_name 'Describe arguments to afficher here'
-command :afficher do |c|
-=======
 #5eme Fonctionnalite
 desc 'Afficher les informations de la classe et des etudiants'
-arg_name 'Describe arguments to afficher here'
+arg_name ' '
 command :afficher do |c|
-  c.desc 'Calculer les cotes selon les lettres que l utilisateur aurait fourni'
-  c.default_value 'A B C D E F'
-  c.flag :f
->>>>>>> 03c0327b31ba1139609912d2768d37a7a8a45cfc
   c.action do |global_options,options,args|
     GestionDeNotes.afficher
   end
 end
+
+
 pre do |global,command,options,args|
   # Pre logic here
   # Return true to proceed; false to abort and not call the

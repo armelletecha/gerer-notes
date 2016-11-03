@@ -1,100 +1,24 @@
 module GestionDeNotes
 require 'csv'
 
-  VERSION = '0.0.1'
-
-#Classe Etudiant qui  modelise les etudiants de la classe
 class Etudiant
-  attr_reader :code
-  attr_reader :nom
-  attr_reader :prenom
-  attr_accessor :notes
-  attr_accessor :moyenne
-  attr_accessor :cote
+	attr_reader :code
+	attr_reader :nom
+	attr_reader :prenom
+	attr_accessor :notes
+	attr_accessor :moyenne
+	attr_accessor :cote
 
-  def initialize(code, nom, prenom, note, moyenne, cote)
-    @code = code
-    @nom = nom
-    @prenom = prenom
-    @notes = note
-    @moyenne = moyenne
-    @cote = cote
-  end
+	def initialize(code, nom, prenom, note, moyenne, cote)
+		@code = code
+		@nom = nom
+		@prenom = prenom
+		@notes = note
+		@moyenne = moyenne
+		@cote = cote
+		
+	end
 end
-
-#Classe travail qui modelise les travaux d evaluation des etudiants
-class Travail
-  attr_reader :id_devoir
-  attr_reader :nom_devoir
-  attr_reader :ponderation
-  attr_reader :note_max
-  
-  def initialize( id,nom,ponderation,note_max )
-    @id_devoir = id
-    @nom_devoir = nom
-    @ponderation = ponderation
-    @note_max = note_max
-  end
-end
-
-#Convertir un string en hash
-  def self.convert_to_hash(var_string)
-    tableau = Array.new
-    tableau = var_string.split("\"")
-    tableau = tableau.join
-    tableau = tableau.split("{")
-    tableau = tableau[1].split("}")
-    tableau = tableau[0].split(",")
-    tableau.shift if tableau[0] == "=>nil"
-    tableau = tableau.join
-    var_hash = Hash[tableau.split(" ").map{|str| str.split("=>")}]
-    return var_hash
-  end
-
-#Lecture du fichier description de cours 
-  def self.lecture_fichier(fichier)
-    first = true
-    tableau_etudiants = Array.new
-    CSV.foreach(fichier) do |ligne|
-      if first then
-        first = false
-      else
-        ligne[3] = "{} " if ligne[3] == "{}"
-        inconnu = convert_to_hash(ligne[3])
-        etudiant = Etudiant.new(ligne[0],
-                                ligne[1],
-                                ligne[2],
-                                inconnu,
-                                ligne[4],
-                                ligne[5])
-
-        tableau_etudiants.push(etudiant)
-      end   
-    end
-    return tableau_etudiants
-  end
-
-#Lecture du fichier description des travaux
-  def self.lecture_fichier_cours(fichier)
-    informations_cours = Array.new
-    csv_contents = CSV.read( fichier )
-    csv_contents.shift
-    csv_contents.shift
-    csv_contents.shift
-    csv_contents.shift
-    csv_contents.shift
-
-    csv_contents.each do |ligne|
-      travail = Travail.new(ligne[0],
-                            ligne[1],
-                            ligne[2],
-                            ligne[3])
-      informations_cours.push(travail)
-
-    end
-    return informations_cours
-  end
-
 
 #methode pour enregistrer la note d'un etudiant 
   def self.enregistrer_note( *args )
@@ -202,50 +126,6 @@ end
     end
   end
 
-
-
-#calculer la moyenne de la classe
-  def self.moyenne_classe
-    tableau_etudiants = lecture_fichier('liste_etudiants_defaut.csv')
-    somme = 0
-    compteur = 0  
-    succes = 0
-    tableau_etudiants.each do |etudiant|
-      somme  += etudiant.moyenne.to_f
-      compteur+=1
-      succes = 1
-    end
-
-    #Diviser la somme par le nombre d'etudiants
-    moyenne = somme / compteur
-    puts "la moyenne de la classe est "
-    if succes == 1 then
-      tableau_travaux = lecture_fichier_cours('informations_cours_defaut.csv')
-      tableau_travaux.each do |travail|
-        line_arr = CSV.readlines('informations_cours_defaut.csv')
-        line_arr.delete(travail)
-      end
-      csv_object = CSV.open('informations_cours_defaut.csv', "r+")
-      csv_object << ["sigle du cours","MGL7460"]
-      csv_object << ["nom du professeur","Guy Tremblay"]
-      csv_object << ["numero du groupe","1"]
-      csv_object << ["",""]
-      csv_object << ["moyenne",moyenne]
-
-      tableau_travaux.each do |travail|
-        csv_object << [travail.id_devoir, 
-                      travail.nom_devoir, 
-                      travail.ponderation, 
-                      travail.note_max]
-      end
-      return moyenne
-    else 
-      return "Oups!! erreur quelque part"
-    end  
-  end
-
-
-
 #fonction pour attribuer les cotes
   def self.attribuer_cote
     tableau_etudiants = lecture_fichier('liste_etudiants_defaut.csv')
@@ -280,14 +160,8 @@ end
     end
   end
 
-  #afficher les informations de la classe
-  def self.afficher
-    CSV.foreach('informations_cours_defaut.csv') do |ligne|
-      puts ligne.inspect
-    end
 
-    CSV.foreach('liste_etudiants_defaut.csv') do |ligne|
-      puts ligne.inspect
-    end   
-  end
 end
+
+
+
