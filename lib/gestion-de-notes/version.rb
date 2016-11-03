@@ -90,7 +90,7 @@ end
     fichier_Delete = 0
     nom_devoir = ''
     tableau_etudiants = lecture_fichier('liste_etudiants_defaut.csv')
-    tableau_travaux = lecture_fichier_cours('informations_cours_defaut.csv')
+    tableau_travaux = lecture_fichier_cours('informations_cours_defaut_test.csv')
   #verifier que l id_devoir specifie existe
     tableau_travaux.each do |travail|
       if travail.id_devoir == args[1] and travail.note_max >= args[2] then
@@ -126,7 +126,7 @@ end
   end
   def self.moyenne_etudiants
     tableau_etudiants = lecture_fichier('liste_etudiants_defaut.csv')
-    tableau_travaux = lecture_fichier_cours('informations_cours_defaut.csv')
+    tableau_travaux = lecture_fichier_cours('informations_cours_defaut_test.csv')
     i = 0
   #calculer la moyenne de chaque etudiant
     tableau_etudiants.each do |etudiant|
@@ -143,7 +143,7 @@ end
       end
       etudiant.moyenne = note_ponderee / somme_ponderation
       i+=1
-      puts "l\'etudiant " + etudiant.code + " a obtenu une moyenne finale de " +etudiant.moyenne    
+      puts "l\'etudiant " +etudiant.code+ " a obtenu une moyenne finale de " +etudiant.moyenne    
     end
   #modifier le fichier CSV pour inserer la moyenne de chaque etudiant
     if tableau_etudiants.length == i then
@@ -176,12 +176,12 @@ end
     puts "la moyenne de la classe est "
 #a remplacer par la fonction d'ecriture
     if succes == 1 then
-      tableau_travaux = lecture_fichier_cours('informations_cours_defaut.csv')
+      tableau_travaux = lecture_fichier_cours('informations_cours_defaut_test.csv')
       tableau_travaux.each do |travail|
-        line_arr = CSV.readlines('informations_cours_defaut.csv')
+        line_arr = CSV.readlines('informations_cours_defaut_test.csv')
         line_arr.delete(travail)
       end
-      csv_object = CSV.open('informations_cours_defaut.csv', "r+")
+      csv_object = CSV.open('informations_cours_defaut_test.csv', "r+")
       tableau_travaux.each do |travail|
         csv_object << [travail.id_devoir, travail.nom_devoir, travail.ponderation, travail.note_max]
       end

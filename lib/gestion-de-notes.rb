@@ -1,7 +1,9 @@
 
 require 'gestion-de-notes/version.rb'
 
-require 'gestion-de-notes/Etudiant.rb'
+require 'gestion-de-notes/etudiant.rb'
+require 'gestion-de-notes/travail.rb'
+require 'gestion-de-notes/gestion-de-notes.rb'
 
 require 'gestion-de-notes/Travail.rb'
 
