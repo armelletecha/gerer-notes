@@ -32,7 +32,7 @@ command :enregistrer_note do |c|
   note = args.shift
   
 #enregistrement de la note de l etudiant
-  g = GestionDeNotes::Etudiant.enregistrer_note(code_permanent, id_devoir, note)
+  g = GestionDeNotes.enregistrer_note(code_permanent, id_devoir, note)
     puts g
   end
 end
@@ -44,7 +44,7 @@ command :moyenne_etudiants do |c|
   c.action do |global_options,options,args|
   fichier_etudiants = global_options[:fichier_etudiants]
   fichier_cours = global_options[:fichier_cours]
-  m = GestionDeNotes::Etudiant.moyenne_etudiants
+  m = GestionDeNotes.moyenne_etudiants
     puts m
   end
 end
@@ -73,7 +73,7 @@ command :attribuer_cote do |c|
   c.action do |global_options,options,args|
   fichier_etudiants = global_options[:fichier_etudiants]
   fichier_cours = global_options[:fichier_cours]
-  c = GestionDeNotes::Etudiant.attribuer_cote
+  c = GestionDeNotes.attribuer_cote
     puts c
   end
 end

@@ -18,9 +18,10 @@ class Etudiant
 		@cote = cote
 		
 	end
+end
 
 #methode pour enregistrer la note d'un etudiant 
-  def enregistrer_note( *args )
+  def self.enregistrer_note( *args )
     existe = 0
     succes = 0
     fichier_Delete = 0
@@ -76,7 +77,7 @@ class Etudiant
   end
 
 #Calculer la moyenne de chaque étudiant de la classe
-  def moyenne_etudiants
+  def self.moyenne_etudiants
     tableau_etudiants = lecture_fichier('liste_etudiants_defaut.csv')
     tableau_travaux = lecture_fichier_cours('informations_cours_defaut.csv')
     i = 0
@@ -126,7 +127,7 @@ class Etudiant
   end
 
 #fonction pour attribuer les cotes
-  def attribuer_cote
+  def self.attribuer_cote
     tableau_etudiants = lecture_fichier('liste_etudiants_defaut.csv')
     moyenne_de_la_classe = GestionDeNotes.moyenne_classe
     succes = 0
@@ -159,9 +160,6 @@ class Etudiant
     end
   end
 
-
-
-end
 
 end
 

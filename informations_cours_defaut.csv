@@ -1,11 +1,14 @@
 sigle du cours,MGL7460
 nom du professeur,Guy Tremblay
 numero du groupe,1
-"",""
-moyenne,0.0
-1,Projet 1,25,40
-2,Projet 2,25,40
+
+moyenne_de_la_classe,0.0
+
+projet1,25,40,
+2,projet2,25,40
 3,Examen,50,50
-0,,,
-2,Projet 2,25,40
+,,,
+40,
+2,projet2,25,40
 3,Examen,50,50
+

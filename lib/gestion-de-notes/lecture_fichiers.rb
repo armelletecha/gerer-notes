@@ -1,7 +1,7 @@
-module GestionDeNotes
-require 'csv'
+module LectureEcriture
+  require 'csv'
 
-#Convertir un string en hash
+  #Convertir un string en hash
   def self.convert_to_hash(var_string)
     tableau = Array.new
     tableau = var_string.split("\"")
@@ -15,7 +15,7 @@ require 'csv'
     return var_hash
   end
 
-#Lecture du fichier description de cours 
+  #Lecture du fichier description de cours 
   def self.lecture_fichier(fichier)
     first = true
     tableau_etudiants = Array.new
@@ -38,10 +38,12 @@ require 'csv'
     return tableau_etudiants
   end
 
-#Lecture du fichier description des travaux
+  #Lecture du fichier description des travaux
   def self.lecture_fichier_cours(fichier)
     informations_cours = Array.new
-    csv_contents = CSV.read( fichier )
+    csv_contents = CSV.read(fichier)
+    csv_contents.shift
+    csv_contents.shift
     csv_contents.shift
     csv_contents.shift
     csv_contents.shift

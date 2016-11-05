@@ -1,4 +1,3 @@
-module GestionDeNotes
 class Travail
 	attr_reader :id_devoir
 	attr_reader :nom_devoir
@@ -13,5 +12,4 @@ class Travail
 		@note_max = note_max
 		
 	end
-end
 end
