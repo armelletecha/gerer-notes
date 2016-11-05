@@ -1,0 +1,48 @@
+module LectureEcriture
+  require 'csv'
+
+  def self.ecriture_fichier(element_a_ecrire,fichier)
+
+    #supprimer tout le contenu du fichier si on a insere la note dans le tableau
+     element_a_ecrire.each do |etudiant|
+       line_arr = CSV.readlines(fichier)
+       line_arr.delete(etudiant)
+     end
+
+      #Remplir le fichier avec le nouveau tableau_etudiants qui a été précédemment modifié 
+      csv_object = CSV.open(fichier, "r+")
+      csv_object << ["code_permanent","nom","prenom","notes","moyenne","cote"]
+      element_a_ecrire.each do |etudiant|
+        csv_object << [etudiant.code, 
+                      etudiant.nom, 
+                      etudiant.prenom, 
+                      etudiant.notes,
+                      etudiant.moyenne,
+                      etudiant.cote]
+      end
+  end
+
+
+  def self.ecriture_fichier_cours(tableau_travaux,element,fichier)
+     tableau_travaux = lecture_fichier_cours(fichier)
+      tableau_travaux.each do |travail|
+        line_arr = CSV.readlines(fichier)
+        line_arr.delete(travail)
+      end
+
+      csv_object = CSV.open(fichier, "r+")
+      csv_object << ["sigle du cours","MGL7460"]
+      csv_object << ["nom du professeur","Guy Tremblay"]
+      csv_object << ["numero du groupe","1"]
+      csv_object << [ ]
+      csv_object << ["moyenne_de_la_classe",element]
+      csv_object << [ ]
+
+      tableau_travaux.each do |travail|
+        csv_object << [travail.id_devoir, 
+                      travail.nom_devoir, 
+                      travail.ponderation, 
+                      travail.note_max]
+      end
+  end
+end
