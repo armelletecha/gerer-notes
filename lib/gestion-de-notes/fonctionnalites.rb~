@@ -1,6 +1,12 @@
 module GestionDeNotes
 require 'csv'
 
+class << self
+    attr_accessor :fichier_etudiants
+    attr_accessor :fichier_cours
+    attr_accessor :seuil_cote
+  end
+
 #*********methode pour enregistrer la note d'un etudiant**********
 
 #****************************************************************
@@ -11,12 +17,12 @@ require 'csv'
     #initialisation des variables
     existe = 0
     succes = 0
-    fichier_Delete = 0
     nom_devoir = ''
+    tableau_sortie1 = Array.new
 
     #lecture du fichier
-    tableau_etudiants = LectureEcriture.lecture_fichier('liste_etudiants_defaut.csv')
-    tableau_travaux = LectureEcriture.lecture_fichier_cours('informations_cours_defaut.csv')
+     tableau_etudiants = LectureEcriture.lecture_fichier(fichier_etudiants)
+    tableau_travaux = LectureEcriture.lecture_fichier_cours(fichier_cours)
 
   #traitement
   #verifier que l id_devoir specifie existe
@@ -27,29 +33,24 @@ require 'csv'
       end
     end
 
-    puts "Le devoir n\'existe pas ou la note de l\'etudiant est superieur a la note maximum " if existe == 0
-
-  #inserer la note dans le tableau des etudiants
+    #inserer la note dans le tableau des etudiants
     tableau_etudiants.each do |etudiant|
       if existe == 1 and etudiant.code == args[0] then
-        etudiant.notes[nom_devoir] = args[2] 
-        succes = 1
-        puts "l\'etudiant " + etudiant.nom + " " + etudiant.prenom + 
-            " de matricule " + args[0] + 
-            " a obtenu la note de " + args[2] + 
-            " pour " + nom_devoir
+      	succes = 1
+        etudiant.notes[nom_devoir] = args[2]
+        tableau_sortie1.push(etudiant)
+      else
+        tableau_sortie1.push(0)
       end
     end
- 
+
+    tableau_sortie1.push(succes)
+    tableau_sortie1.push(nom_devoir)
+
 #ecrire dans le fichier
-    if succes == 1 then
-      LectureEcriture.ecriture_fichier(tableau_etudiants,
-		       'liste_etudiants_defaut.csv')
-      
-      return " Note enregistree avec succes"
-    else 
-      return "Un probleme est survenu"
-    end
+    LectureEcriture.ecriture_fichier(tableau_etudiants,
+           fichier_etudiants) if succes == 1
+    return tableau_sortie1
   end
 
 
@@ -61,16 +62,21 @@ require 'csv'
 
 #initialisation des variables
     i = 0
+    reponse = 0
+    etudiants_moyenne_pas_calculee = Array.new
+    etudiants_moyenne_calculee = Array.new
+    tableau_sortie = Array.new
 
-#lecture des fichiers
-    tableau_etudiants = LectureEcriture.lecture_fichier('liste_etudiants_defaut.csv')
-    tableau_travaux = LectureEcriture.lecture_fichier_cours('informations_cours_defaut.csv')
+  #lecture des fichiers
+    tableau_etudiants = LectureEcriture.lecture_fichier(fichier_etudiants)
+    tableau_travaux = LectureEcriture.lecture_fichier_cours(fichier_cours)
     
   #calculer la moyenne de chaque etudiant
     tableau_etudiants.each do |etudiant|
       somme_ponderation = 0
       note_ponderee = 0
       tableau_notes = etudiant.notes
+
       tableau_notes.each do |key, value|
         tableau_travaux.each do |travail|
           if key == travail.nom_devoir then
@@ -80,24 +86,24 @@ require 'csv'
         end
       end
 
-      if somme_ponderation == 0 then
-      	puts "oups!! une erreur est survenue, l\'etudiant " +etudiant.code+ " n\'a pas toutes ses notes"
+      if somme_ponderation == 0 || somme_ponderation != 100 then
+        etudiants_moyenne_pas_calculee.push(etudiant)
       else
       	etudiant.moyenne = note_ponderee / somme_ponderation
+        etudiants_moyenne_calculee.push(etudiant)
       	i+=1
-      	puts "L\'etudiant " +etudiant.code+ " a obtenu une moyenne finale de " +etudiant.moyenne.to_s
+        LectureEcriture.ecriture_fichier(tableau_etudiants,
+           fichier_etudiants)
       end  
     end
 
-  #modifier le fichier CSV pour inserer la moyenne de chaque etudiant
-    if tableau_etudiants.length == i then
-      LectureEcriture.ecriture_fichier(tableau_etudiants,
-		       'liste_etudiants_defaut.csv')
-      return "Les moyennes ont ete calculees avec succes!"
-    else 
-      return "Oups!! Toutes les moyennes n\'ont pas ete calculees !!"
-    end
+    reponse = 1 if tableau_etudiants.length == i
+    tableau_sortie << reponse
+    tableau_sortie.push(etudiants_moyenne_pas_calculee)
+    tableau_sortie.push(etudiants_moyenne_calculee)
+    return tableau_sortie
   end
+  
 
 #******************fonction pour attribuer les cotes**************************************
 
@@ -110,7 +116,7 @@ require 'csv'
     succes = 0
 
     #lecture fichier
-    tableau_etudiants = LectureEcriture.lecture_fichier('liste_etudiants_defaut.csv')
+    tableau_etudiants = LectureEcriture.lecture_fichier(fichier_etudiants)
     
     #traitement
     tableau_etudiants.each do |etudiant|
@@ -127,38 +133,31 @@ require 'csv'
   #modifier le fichier pour inserer les cotes de chaque etudiant
     if succes == 1 then
       LectureEcriture.ecriture_fichier(tableau_etudiants,
-		                       'liste_etudiants_defaut.csv')
+		                       fichier_etudiants)
       return "Cote enregistree"
     else 
       return "Erreur"
     end
+    
   end
 
 #************************calculer la moyenne de la classe**********************************
 
 #********************************************************************************************
-
-  def self.moyenne_classe
-    tableau_etudiants = LectureEcriture.lecture_fichier('liste_etudiants_defaut.csv')
+def self.moyenne_classe
+    tableau_etudiants = LectureEcriture.lecture_fichier(fichier_etudiants)
     somme = 0
     compteur = 0  
-    succes = 0
     tableau_etudiants.each do |etudiant|
       somme  += etudiant.moyenne.to_f
       compteur+=1
-      succes = 1
     end
 
     #Diviser la somme par le nombre d'etudiants
     moyenne = somme / compteur
-    puts "la moyenne de la classe est "
-    if succes == 1 then
-      tableau_travaux = LectureEcriture.lecture_fichier_cours('informations_cours_defaut.csv')
-      LectureEcriture.ecriture_fichier_cours(tableau_travaux,moyenne,'informations_cours_defaut.csv')
-      return moyenne
-    else 
-      return "Oups!! erreur quelque part"
-    end  
+    tableau_travaux = LectureEcriture.lecture_fichier_cours(fichier_cours)
+    LectureEcriture.ecriture_fichier_cours(tableau_travaux,moyenne,fichier_cours)
+    return moyenne
   end
 
 
@@ -166,14 +165,16 @@ require 'csv'
   #********************************afficher les informations de la classe*************************************
 
   #**********************************************************************************************************
-  def self.afficher
-    CSV.foreach('informations_cours_defaut.csv') do |ligne|
-      puts ligne.inspect
+def self.afficher
+    tab1 = Array.new
+    CSV.foreach(fichier_cours) do |ligne|
+      tab1.push(ligne)
     end
 
-    CSV.foreach('liste_etudiants_defaut.csv') do |ligne|
-      puts ligne.inspect
-    end   
+    CSV.foreach(fichier_etudiants) do |ligne|
+      tab1.push(ligne)
+    end 
+    return tab1  
   end
 
 end

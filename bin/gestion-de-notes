@@ -36,16 +36,17 @@ command :enregistrer_note do |c|
 
 #enregistrement de la note de l etudiant
   g = GestionDeNotes.enregistrer_note(code_permanent, id_devoir, note)
+    puts g[2]
   if g[2] == 0 then
     puts "Un probleme est survenu"
     puts "Le code du devoir est errone ou la note de l\'etudiant est superieur a la note maximum "
-  else 
-    puts "l\'etudiant " + code_permanent + 
-            " a obtenu la note de " + note.to_s + 
-            " au devoir " + g[1]
-    puts " Note enregistree avec succes" 
   end
-
+    if g[2] == 1 then
+      puts "l\'etudiant " + code_permanent +
+            " a obtenu la note de " + note.to_s + 
+            " au devoir " + g[1].to_s
+     puts " Note enregistree avec succes"
+   end
 end
 end
 
@@ -98,17 +99,33 @@ end
 
 
 #4eme fonctionnalite
+#4eme fonctionnalite
 desc 'Attribuer les cotes'
 arg_name ' '
 command :attribuer_cote do |c|
-   c.desc 'Calculer les cotes selon les lettres que l utilisateur aurait fourni'
-   c.default_value 'A A- B+ B E'
-  c.flag :f
+  c.desc 'Calculer les cotes selon la delimitation fixe par l utilisateur'
+  c.default_value '85,80,75,70'
+  c.flag [:s,:seuil_cote]
+
   c.action do |global_options,options,args|
-  fichier_etudiants = global_options[:fichier_etudiants]
-  fichier_cours = global_options[:fichier_cours]
-  c = GestionDeNotes.attribuer_cote
-    puts c
+    fichier_etudiants = global_options[:fichier_etudiants]
+    fichier_cours = global_options[:fichier_cours]
+
+    seuil_cote = options[:seuil_cote]
+
+    GestionDeNotes.seuil_cote = seuil_cote
+    GestionDeNotes.fichier_etudiants = fichier_etudiants
+    GestionDeNotes.fichier_cours = fichier_cours
+
+    sortie = GestionDeNotes.attribuer_cote
+    if sortie[0] == 0 then
+      puts "mauvaise specification des seuil pour les cotes"
+    else
+      sortie.each do |etudiant|
+        puts "L\'etudiant " + etudiant.code + " a obtenu la cote " + etudiant.cote
+      end
+      puts "Cote enregistree"
+    end
   end
 end
 

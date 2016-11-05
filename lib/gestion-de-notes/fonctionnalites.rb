@@ -111,33 +111,39 @@ class << self
   def self.attribuer_cote
     
     #initialisation
-    moyenne_de_la_classe = GestionDeNotes.moyenne_classe
-    succes = 0
+    tableau_sortie1 = Array.new
+    value = 1
+    tableau_cote = seuil_cote.split(',')
 
     #lecture fichier
-    tableau_etudiants = LectureEcriture.lecture_fichier('liste_etudiants_defaut.csv')
-    
-    #traitement
-    tableau_etudiants.each do |etudiant|
-      succes = 0 if etudiant.moyenne.to_f <= 0.0 and etudiant.moyenne.to_f >= 100.0
-      etudiant.cote = "A" if etudiant.moyenne.to_f <= 100.0 and etudiant.moyenne.to_f >= 85.0
-      etudiant.cote = "A-" if etudiant.moyenne.to_f <= 84.0 and etudiant.moyenne.to_f >= 80.0
-      etudiant.cote = "B+" if etudiant.moyenne.to_f <= 79.0 and etudiant.moyenne.to_f >= 75.0
-      etudiant.cote = "B" if etudiant.moyenne.to_f <= 74.0 and etudiant.moyenne.to_f >= 70.0
-      etudiant.cote = "E" if etudiant.moyenne.to_f < 70.0
-      succes = 1
-      puts "L\'etudiant " + etudiant.code + " a obtenu la cote " + etudiant.cote
+    tableau_etudiants = LectureEcriture.lecture_fichier(fichier_etudiants)
+
+    #verifier que tableau_cote contient 04 valeurs
+    value = 0 unless tableau_cote.length == 4
+
+    #verifier que les valeurs de tableau_cote sont rangees en ordre croissant
+    indice = tableau_cote.length - 1
+    tableau_cote.each_index do |i|
+      value = 0 if tableau_cote[i].to_f < tableau_cote[i+1].to_f and i < indice
     end
 
-  #modifier le fichier pour inserer les cotes de chaque etudiant
-    if succes == 1 then
-      LectureEcriture.ecriture_fichier(tableau_etudiants,
-		                       'liste_etudiants_defaut.csv')
-      return "Cote enregistree"
-    else 
-      return "Erreur"
+    #traitement
+    if value == 0 then
+      tableau_sortie1.push(0)
+    else
+      tableau_etudiants.each do |etudiant|
+        etudiant.cote = "A" if etudiant.moyenne.to_f <= 100.0 and etudiant.moyenne.to_f >= tableau_cote[0].to_f
+        etudiant.cote = "A-" if etudiant.moyenne.to_f <= tableau_cote[0].to_f and etudiant.moyenne.to_f >= tableau_cote[1].to_f
+        etudiant.cote = "B+" if etudiant.moyenne.to_f <= tableau_cote[1].to_f and etudiant.moyenne.to_f >= tableau_cote[2].to_f
+        etudiant.cote = "B" if etudiant.moyenne.to_f <= tableau_cote[2].to_f and etudiant.moyenne.to_f >= tableau_cote[3].to_f
+        etudiant.cote = "E" if etudiant.moyenne.to_f < tableau_cote[3].to_f and etudiant.moyenne.to_f >= 0.0
+        tableau_sortie1.push(etudiant)
+      end
     end
-    
+    LectureEcriture.ecriture_fichier(tableau_etudiants,
+                                     fichier_etudiants)
+    return tableau_sortie1
+
   end
 
 #************************calculer la moyenne de la classe**********************************

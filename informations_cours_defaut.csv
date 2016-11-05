@@ -4,12 +4,10 @@ numero du groupe,1
 
 moyenne_de_la_classe,0.0
 
+id_devoir,nom_devoir,ponderation,note_max
+1,projet1,25,40
 2,projet2,25,40
 3,Examen,50,50
-,,,
-40,,,
-2,projet2,25,40
-3,Examen,50,50
-,,,
-n,50,50
+
+
 
